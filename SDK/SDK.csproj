@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="NSwag.ApiDescription.Client" Version="13.14.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<OpenApiReference Include="../ClientGenerator/swagger.json" CodeGenerator="NSwagCSharp">
+			<Namespace>SDK</Namespace>
+			<ClassName>WeatherServiceClientSDK</ClassName>
+			<OutputPath>../../SDK/WeatherServiceClientSDK.cs</OutputPath>
+			<Options>/GenerateClientInterfaces:true </Options>
+		</OpenApiReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ClientGenerator\ClientGenerator.csproj" />
+	</ItemGroup>
+</Project>
