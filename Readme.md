@@ -1,7 +1,7 @@
 Example of Client Generation with NSwag
 ============
 
-![Build](https://github.com/Tff27/api-client-autogeneration/actions/workflows/dotnet.yml/badge.svg)
+![Build](https://github.com/Tff27/Api-Client-Autogeneration/actions/workflows/dotnet.yml/badge.svg)
 
 This solution contains 3 projects:
 * ClientGenerator - An API with the default WeatherForecastController and with automated swagger file generation on build;
