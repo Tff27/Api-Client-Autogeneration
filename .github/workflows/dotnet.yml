@@ -20,7 +20,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: .NET Core Local Tool Restore
-      uses: |
+      run: |
         cd ClientGenerator
         dotnet tool restore
     - name: Build
