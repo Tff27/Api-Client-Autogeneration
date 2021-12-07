@@ -20,7 +20,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: .NET Core Local Tool Restore
-      uses: xt0rted/dotnet-tool-restore@v1.0.1
+      uses: |
+        cd ClientGenerator
+        dotnet tool restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
