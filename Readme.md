@@ -16,3 +16,4 @@ This solution contains 3 projects:
 ## Resources & Inspiration
 * https://devblogs.microsoft.com/dotnet/generating-http-api-clients-using-visual-studio-connected-services/
 * https://markheath.net/post/openapi-autogen-aspnetcore
+* https://github.com/RicoSuter/NSwag/wiki/CSharpClientGeneratorSettings
