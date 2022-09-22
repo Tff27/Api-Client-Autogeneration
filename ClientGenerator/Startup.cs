@@ -1,18 +1,15 @@
 namespace ClientGenerator
 {
+    using AspNetCore.Authentication.ApiKey;
+    using ClientGenerator.Security;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.HttpsPolicy;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
     using Microsoft.OpenApi.Models;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class Startup
     {
@@ -26,11 +23,49 @@ namespace ClientGenerator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(ApiKeyDefaults.AuthenticationScheme)
+                .AddApiKeyInHeader<ApiKeyProvider>(options =>
+                {
+                    options.Realm = "Sample Web API";
+                    options.KeyName = "ApiKey";
+                    options.IgnoreAuthenticationIfAllowAnonymous = true;
+                });
 
             services.AddControllers();
+
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ClientGenerator", Version = "v1" });
+                c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+                {
+                    Description = "ApiKey must appear in header",
+                    Type = SecuritySchemeType.ApiKey,
+                    Name = "ApiKey",
+                    In = ParameterLocation.Header,
+                    Scheme = "ApiKeyScheme"
+                });
+                var key = new OpenApiSecurityScheme()
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "ApiKey"
+                    },
+                    In = ParameterLocation.Header
+                };
+                var requirement = new OpenApiSecurityRequirement
+                {
+                    { key, new List<string>() }
+                };
+                c.AddSecurityRequirement(requirement);
             });
         }
 
@@ -48,6 +83,7 @@ namespace ClientGenerator
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
